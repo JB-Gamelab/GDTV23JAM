@@ -8,35 +8,45 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpSpeed = 100f;
-    [SerializeField] private GameInput gameInput;
 
     [SerializeField] private LayerMask platformLayerMask;
 
-    private Rigidbody2D rb;
+    [SerializeField] private ProjectileBehaviour projectilePrefab;
+    [SerializeField] private Transform projectileOffset;
+
+    [SerializeField] private GameInput gameInput;
+
+    private Rigidbody2D _rigidbody;
     private BoxCollider2D boxCollider2D;
     private SpriteRenderer spriteRenderer;
 
 
 
     private void Start() {
-        rb = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
         boxCollider2D= GetComponent<BoxCollider2D>();
         spriteRenderer= GetComponent<SpriteRenderer>();
     }
 
     private void Update()
     {
-        rb.velocity = new Vector2(moveSpeed * gameInput.GetMovementVectorX(), rb.velocity.y);
+        _rigidbody.velocity = new Vector2(moveSpeed * gameInput.GetMovementVectorX(), _rigidbody.velocity.y);
 
         if (IsGrounded() && gameInput.GetJump()) {
-            rb.AddForce(new Vector2(rb.velocity.x, jumpSpeed));
+            _rigidbody.AddForce(new Vector2(_rigidbody.velocity.x, jumpSpeed));
         }
 
         if (gameInput.GetMovementVectorX() > 0) {
             spriteRenderer.flipX = true;
+            projectileOffset.position = new Vector3(0.819f, 0.127f, 0f);
         } 
         if (gameInput.GetMovementVectorX() < 0) {
             spriteRenderer.flipX = false;
+            projectileOffset.position = new Vector3(-0.819f, 0.127f, 0f);
+        }
+
+        if (gameInput.GetPrimary()) {
+            Instantiate(projectilePrefab, projectileOffset.position, transform.rotation);
         }
     }
 
@@ -47,7 +57,5 @@ public class Player : MonoBehaviour
         return raycastHit.collider != null;
     }
 
-    private void SetSpriteDirection() {
 
-    }
 }

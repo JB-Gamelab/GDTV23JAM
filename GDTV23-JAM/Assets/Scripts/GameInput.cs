@@ -31,4 +31,30 @@ public class GameInput : MonoBehaviour
 
         return jump;
     }
+
+    public bool GetPrimary() {
+        bool primary = false;
+        float primaryPress = playerInputActions.Player.Primary.ReadValue<float>();
+
+        if (primaryPress > 0) {
+            primary = true;
+        } else {
+            primary = false;
+        }
+
+        return primary;
+    }
+
+    public bool GetSecondary() {
+        bool secondary = false;
+        float secondaryPress = playerInputActions.Player.Secondary.ReadValue<float>();
+
+        if (secondaryPress > 0) {
+            secondary = true;
+        } else {
+            secondary = false;
+        }
+
+        return secondary;
+    }
 }
