@@ -130,6 +130,8 @@ public class Player : MonoBehaviour
             Instantiate(secondarySkillTeleport, this.transform);
             if (isFacingRight) {
                 this.transform.position = this.transform.position + new Vector3(teleportDistance, 0, 0);
+            } else {
+                this.transform.position = this.transform.position - new Vector3(teleportDistance, 0, 0);
             }
         }
     }

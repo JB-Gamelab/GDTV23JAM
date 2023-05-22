@@ -5,28 +5,48 @@ using UnityEngine;
 public class ProjectileBehaviour : MonoBehaviour
 {
 
-    [SerializeField] float projectileSpeed = 5f;
+    [SerializeField] float lightProjectileSpeed = 2f;
+    [SerializeField] float darkProjectileSpeed = 20f;
+    [SerializeField] float lightProjectileLife = 6f;
+    [SerializeField] float darkProjectileLife = 0.15f;
+    [SerializeField] float lightProjectileDamage = 5f;
+    [SerializeField] float darkProjectileDamage = 2f;
     [SerializeField] GameObject lightProjectile;
     [SerializeField] GameObject darkProjectile;
+
+    private float projectileSpeed;
+    private float projectileLife;
+    private float projectileDamage;
+   
 
     private void Awake() {
         if (Player.instance.GetIsDark()) {
             lightProjectile.SetActive(false);
             darkProjectile.SetActive(true);
-            projectileSpeed = 20f;
+            projectileSpeed = darkProjectileSpeed;
+            projectileLife = darkProjectileLife;
+            projectileDamage = darkProjectileDamage;
         } else {
             lightProjectile.SetActive(true);
             darkProjectile.SetActive(false);
-            projectileSpeed = 1.5f;
+            projectileSpeed = lightProjectileSpeed;
+            projectileLife = lightProjectileLife;
+            projectileDamage = lightProjectileDamage;
         }
     }
 
     private void Update() {
-            transform.position += transform.right * Time.deltaTime * projectileSpeed;
+        transform.position += transform.right * Time.deltaTime * projectileSpeed;
+
+        projectileLife -= Time.deltaTime;
+        if (projectileLife < 0) {
+            Destroy(gameObject);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
         Destroy(gameObject);
+        Debug.Log("hit");
     }
 
 }
