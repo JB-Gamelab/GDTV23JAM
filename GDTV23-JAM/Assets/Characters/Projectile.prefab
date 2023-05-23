@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7899949013215421690}
   m_Layer: 0
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,7 +128,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3df2d077df1661e439a53d717b08e7be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 5
+  lightProjectileSpeed: 5
+  darkProjectileSpeed: 20
+  lightProjectileLife: 6
+  darkProjectileLife: 0.15
+  lightProjectileDamage: 5
+  darkProjectileDamage: 2
   lightProjectile: {fileID: 5246024608338041319}
   darkProjectile: {fileID: 3578730859042785417}
 --- !u!58 &7899949013215421690
@@ -141,7 +146,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

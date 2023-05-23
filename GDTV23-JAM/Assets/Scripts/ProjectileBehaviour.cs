@@ -44,9 +44,18 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        Destroy(gameObject);
-        Debug.Log("hit");
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (!collision.CompareTag("Player")) {
+            Destroy(gameObject);
+        }
+    }
+
+    public float getDamage() {
+        if (!Player.instance.GetIsDark()) {
+            return lightProjectileDamage;
+        } else {
+            return darkProjectileDamage;
+        }
     }
 
 }

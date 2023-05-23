@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpSpeed = 100f;
     [SerializeField] private float teleportDistance = 5f;
+    [SerializeField] private float health = 10f;
 
     [SerializeField] private LayerMask platformLayerMask;
 
@@ -133,6 +134,15 @@ public class Player : MonoBehaviour
             } else {
                 this.transform.position = this.transform.position - new Vector3(teleportDistance, 0, 0);
             }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.collider.CompareTag("Enemy")) {
+            health -= 1;
+        }
+        if (health < 0) {
+            Destroy(gameObject);
         }
     }
 
