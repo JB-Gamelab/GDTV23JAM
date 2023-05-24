@@ -130,8 +130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightProjectileSpeed: 5
   darkProjectileSpeed: 20
-  lightProjectileLife: 6
-  darkProjectileLife: 0.15
+  lightProjectileLife: 4
+  darkProjectileLife: 0.25
   lightProjectileDamage: 5
   darkProjectileDamage: 2
   lightProjectile: {fileID: 5246024608338041319}

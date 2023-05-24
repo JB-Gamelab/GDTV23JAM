@@ -7,6 +7,8 @@ TagManager:
   - Projectile
   - Fireball
   - Enemy
+  - Dark
+  - Shield
   layers:
   - Default
   - TransparentFX

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,10 +10,16 @@ public class Player : MonoBehaviour
 {
     public static Player instance { get; private set; }
 
+    public event EventHandler OnDamageReceived;
+
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpSpeed = 100f;
     [SerializeField] private float teleportDistance = 5f;
     [SerializeField] private float health = 10f;
+    [SerializeField] private float lightProjectileCooldown = 3f;
+    [SerializeField] private float darkProjectileCooldown = 1f;
+    [SerializeField] private float lightSecondaryCooldown = 10f;
+    [SerializeField] private float darkSecondaryCooldown = 8f;
 
     [SerializeField] private LayerMask platformLayerMask;
 
@@ -29,11 +36,16 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private BoxCollider2D boxCollider2D;
-    private SpriteRenderer spriteRenderer;
+
+    private float primaryCooldown = 3f;
+    private float secondaryCooldown = 10f;
 
     private Quaternion directionQuaternion = new Quaternion(0f, 0f, 0f, 1f);
 
     private bool isFacingRight = false;
+    private bool primaryfired = false;
+    private bool secondaryFired = false;
+
     [SerializeField] private bool isDark;
 
     private void Awake() {
@@ -55,18 +67,23 @@ public class Player : MonoBehaviour
     }
 
     private void GameInput_OnSecondaryPressed(object sender, System.EventArgs e) {
-        if (isDark) {
-            //teleport script
-            CastTeleport();
-        } else {
-            //shield script
-            CastShield();
+        if (!secondaryFired) {
+            if (isDark) {
+                //teleport script
+                CastTeleport();
+            } else {
+                //shield script
+                CastShield();
+            }
+            secondaryFired= true;
         }
-        
     }
 
-    private void GameInput_OnPrimaryPressed(object sender, System.EventArgs e) {        
-            Instantiate(projectilePrefab, projectileOffset.position, directionQuaternion);
+    private void GameInput_OnPrimaryPressed(object sender, System.EventArgs e) {
+            if (!primaryfired) {
+                Instantiate(projectilePrefab, projectileOffset.position, directionQuaternion);
+                primaryfired = true;
+            }
     }
 
 
@@ -79,6 +96,31 @@ public class Player : MonoBehaviour
         } else {
             directionQuaternion = new Quaternion(0f, 1f, 0f, 0f);
         }
+
+        if (primaryfired) {
+            primaryCooldown -= Time.deltaTime;
+            if (primaryCooldown <= 0f) {
+                if (!isDark) {
+                    primaryCooldown = lightProjectileCooldown;
+                } else {
+                    primaryCooldown = darkProjectileCooldown;
+                }
+                primaryfired = false;
+            }
+        }
+
+        if (secondaryFired) {
+            secondaryCooldown -= Time.deltaTime;
+            if (secondaryCooldown <= 0f) {
+                if (!isDark) {
+                    secondaryCooldown = lightSecondaryCooldown;
+                } else {
+                    secondaryCooldown = darkSecondaryCooldown;
+                }
+                secondaryFired = false;
+            }
+        }
+
 
         Flip();
 
@@ -139,11 +181,63 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.collider.CompareTag("Enemy")) {
-            health -= 1;
+            if (!GameObject.Find("SecondaryShield(Clone)")) {
+                health -= 1;
+            }
+            OnDamageReceived?.Invoke(this, EventArgs.Empty);
         }
-        if (health < 0) {
-            Destroy(gameObject);
+        if (health <= 0) {
+            gameObject.SetActive(false);
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.CompareTag("Dark")) {
+            isDark = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.CompareTag("Dark")) {
+            isDark = false;
+        }
+    }
+
+    public float GetHealth() {
+        return health;
+    }
+
+    public float GetPrimaryCooldown() {
+        return primaryCooldown; 
+    }
+
+    public float GetSecondaryCooldown() {
+        return secondaryCooldown;
+    }
+
+    public float GetPrimaryCDMax() {
+        if (!isDark) {
+            return lightProjectileCooldown;
+        } else {
+            return darkProjectileCooldown;
+        }
+    }
+
+    public float GetSecondaryCDMax() {
+        if (!isDark) {
+            return lightSecondaryCooldown;
+        } else {
+            return darkSecondaryCooldown;
+        }
+    }
+
+    public bool GetPrimaryFired() {
+        return primaryfired;
+    }
+
+    public bool GetSecondaryFired() {
+        return secondaryFired;
+    }
 }
+
+
