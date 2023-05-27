@@ -123,7 +123,6 @@ public class Player : MonoBehaviour
 
 
         Flip();
-
        
     }
 
@@ -185,6 +184,8 @@ public class Player : MonoBehaviour
                 health -= 1;
             }
             OnDamageReceived?.Invoke(this, EventArgs.Empty);
+        } else if (collision.collider.CompareTag("Death")) {
+            gameObject.SetActive(false);
         }
         if (health <= 0) {
             gameObject.SetActive(false);

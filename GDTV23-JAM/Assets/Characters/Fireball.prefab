@@ -63,7 +63,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireballSpeed: 5
   fireballLife: 2
-  fireballDamage: 2
 --- !u!1 &3287062458315733728
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,8 +131,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1245249495
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 537061d6ab4addf439f918145d65123e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

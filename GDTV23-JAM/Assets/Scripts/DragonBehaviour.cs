@@ -7,7 +7,7 @@ public class DragonBehaviour : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float fireballTimer = 0f;
-    [SerializeField] private float fireballTimerMax = 5f;
+    [SerializeField] private float fireballTimerMax = 1f;
     [SerializeField] private float maxHeight = 5f;
     [SerializeField] private float health = 4f;
     [SerializeField] private ProjectileBehaviour projectileBehaviour;
@@ -18,7 +18,7 @@ public class DragonBehaviour : MonoBehaviour
     private bool up = true;
     private bool playerDetected = false;
 
-    private Quaternion directionQuaternion = new Quaternion(0f, 0f, 0f, 1f);
+    private Quaternion directionQuaternion = new Quaternion(0f, 1f, 0f, 0f);
 
     private void Start() {
         startY = transform.position.y;
@@ -57,9 +57,7 @@ public class DragonBehaviour : MonoBehaviour
             if (health <= 0f) {
                 Destroy(gameObject);
             }
-        }
-
-        if (collision.gameObject.CompareTag("Player")) {
+        } else if (collision.gameObject.CompareTag("Player")) {
             playerDetected = true;
         }
     }

@@ -50,6 +50,12 @@ public class ProjectileBehaviour : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.collider.CompareTag("Environment")) {
+            Destroy(gameObject);
+        }
+    }
+
     public float getDamage() {
         if (!Player.instance.GetIsDark()) {
             return lightProjectileDamage;
