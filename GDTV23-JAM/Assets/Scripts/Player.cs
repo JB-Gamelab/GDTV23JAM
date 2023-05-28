@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     public static Player instance { get; private set; }
 
     public event EventHandler OnDamageReceived;
+    public event EventHandler OnGameOver;
+    public event EventHandler OnProjectileFired;
+    public event EventHandler OnSecondary;
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpSpeed = 100f;
@@ -76,6 +79,7 @@ public class Player : MonoBehaviour
                 CastShield();
             }
             secondaryFired= true;
+            OnSecondary?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -83,6 +87,7 @@ public class Player : MonoBehaviour
             if (!primaryfired) {
                 Instantiate(projectilePrefab, projectileOffset.position, directionQuaternion);
                 primaryfired = true;
+                OnProjectileFired?.Invoke(this, EventArgs.Empty);
             }
     }
 
@@ -169,11 +174,14 @@ public class Player : MonoBehaviour
 
     private void CastTeleport() {
         if (!GameObject.Find("SecondaryTeleport(Clone)")) {
-            Instantiate(secondarySkillTeleport, this.transform);
-            if (isFacingRight) {
-                this.transform.position = this.transform.position + new Vector3(teleportDistance, 0, 0);
-            } else {
-                this.transform.position = this.transform.position - new Vector3(teleportDistance, 0, 0);
+            RaycastHit2D raycastHit = Physics2D.Raycast(boxCollider2D.bounds.center, Vector2.right, boxCollider2D.bounds.extents.y + teleportDistance, platformLayerMask);
+            if (!raycastHit) {
+                Instantiate(secondarySkillTeleport, this.transform);
+                if (isFacingRight) {
+                    this.transform.position = this.transform.position + new Vector3(teleportDistance, 0, 0);
+                } else {
+                    this.transform.position = this.transform.position - new Vector3(teleportDistance, 0, 0);
+                }
             }
         }
     }
@@ -185,10 +193,12 @@ public class Player : MonoBehaviour
             }
             OnDamageReceived?.Invoke(this, EventArgs.Empty);
         } else if (collision.collider.CompareTag("Death")) {
+            OnGameOver?.Invoke(this, EventArgs.Empty);
             gameObject.SetActive(false);
         }
         if (health <= 0) {
-            gameObject.SetActive(false);
+            OnGameOver?.Invoke(this, EventArgs.Empty);
+            gameObject.SetActive(false);            
         }
     }
 

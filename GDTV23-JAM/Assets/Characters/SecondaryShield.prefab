@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shieldTimer: 3
+  shieldHealth: 3
 --- !u!58 &1781472605271433467
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -131,8 +132,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1245249495
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 19a4cdc187317cb49bf827d42d4fc3ea, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6666667}
